@@ -1,17 +1,26 @@
 'use strict';
 
-const switcher = document.querySelector('.btn');
+const table= document.getElementById("table");
 
-switcher.addEventListener('click', function() {
-    document.body.classList.toggle('light-theme');
-    document.body.classList.toggle('dark-theme');
+let tableTR;
+let tableTD;
+let textNode;
 
-    const className = document.body.className;
-    if(className === "light-theme") {
-        this.textContent = "Dark";
-    } else {
-        this.textContent = "Light";
+const url = "https://www.dnd5eapi.co/api/classes/"
+fetch(url)
+    .then((response) => response.json())
+    .then((json) => displayResults(json))
+    .catch((error) => console.error(`Error fetching data: ${error.message}`));
+
+function displayResults(json)
+{
+    for (let i = 0; i < json.results.length; i++)
+    {
+        tableTR = document.createElement("tr");
+        tableTD = document.createElement("td");
+        textNode = document.createTextNode(json.results[i].name);
+        tableTD.appendChild(textNode);
+        tableTR.appendChild(tableTD);
+        table.firstElementChild.appendChild(tableTR);
     }
-
-    console.log('current class name: ' + className);
-});
+}
